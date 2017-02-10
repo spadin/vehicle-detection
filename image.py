@@ -1,8 +1,12 @@
 import cv2
+import numpy as np
 import matplotlib.image as mpimg
 
 def rgb_image(filepath):
     return mpimg.imread(filepath)
+
+def copy_image(image):
+    return np.copy(image)
 
 def rgb_to_colorspace(image, color_space="RGB"):
     color_conversion_code = {
