@@ -3,8 +3,10 @@ import numpy as np
 def sliding_window_list(image, start=(None, None), end=(None, None), window_size=(64, 64), overlap_ratio=(0.5, 0.5)):
     image_height, image_width, _ = image.shape
 
-    if start == (None, None) or end == (None, None):
+    if start == (None, None):
         start = (0, 0)
+
+    if end == (None, None):
         end = (image_width, image_height)
 
     start_x, start_y = start
