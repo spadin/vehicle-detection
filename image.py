@@ -2,11 +2,19 @@ import cv2
 import numpy as np
 import matplotlib.image as mpimg
 
-def rgb_image(filepath):
-    return mpimg.imread(filepath)
+def rgb_image(filepath, filetype="jpg"):
+    image = mpimg.imread(filepath)
+
+    if filetype == "png":
+        image = (image * 255).astype(np.uint8)
+
+    return image
 
 def copy_image(image):
     return np.copy(image)
+
+def resize_image(image, size=(64, 64)):
+    return cv2.resize(image, size)
 
 def rgb_to_colorspace(image, color_space="RGB"):
     color_conversion_code = {
@@ -21,8 +29,7 @@ def rgb_to_colorspace(image, color_space="RGB"):
     }[color_space]
 
     if color_conversion_code is not None and color_space != "gray":
-        image  = cv2.cvtColor(image, color_conversion_code)
-        image /= 255.
+        image = cv2.cvtColor(image, color_conversion_code)
 
     return image
 
