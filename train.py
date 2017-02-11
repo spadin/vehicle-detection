@@ -11,7 +11,7 @@ def train(img_slice=slice(None)):
     images = np.hstack((vehicle_images[img_slice], non_vehicle_images[img_slice]))
 
     print("Extracting features")
-    features = extract_features_from_list(images, filetype="png")
+    features = extract_features_from_list(images, file_type="png")
 
     print("Scaling features")
     features, scaler = scale_training_features(features)

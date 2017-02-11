@@ -3,7 +3,6 @@ image_options = {
 }
 
 hog_options = {
-    "channel_index": "ALL", # Default: "ALL"
     "orientations": 9, # Default: 9
     "pixels_per_cell": (8, 8), # Default: (2, 2)
     "cells_per_block": (2, 2) # Default: (2, 2)
