@@ -16,6 +16,10 @@ def copy_image(image):
 def resize_image(image, size=(64, 64)):
     return cv2.resize(image, size)
 
+def scale_image(image, scale=1.0):
+    height, width, _ = image.shape
+    return resize_image(image, size=(width//scale, height//scale))
+
 def rgb_to_colorspace(image, color_space="RGB"):
     color_conversion_code = {
         "RGB": None,
