@@ -1,18 +1,20 @@
-from feature_extraction import extract_features_from_list, scale_features
-from sklearn.externals import joblib
+from feature_extraction import extract_features_from_list, scale_training_features
+from model import save_model
 from sklearn.model_selection import train_test_split
-from sklearn.svm import SVC
+from sklearn.svm import LinearSVC
 import glob
 import numpy as np
 
-if __name__ == "__main__":
-    img_slice = slice(None)
+def train(img_slice=slice(None)):
     vehicle_images = glob.glob("./data/vehicles/**/*.png")
     non_vehicle_images = glob.glob("./data/non-vehicles/**/*.png")
     images = np.hstack((vehicle_images[img_slice], non_vehicle_images[img_slice]))
 
-    features = extract_features_from_list(images)
-    features = scale_features(features)
+    print("Extracting features")
+    features = extract_features_from_list(images, filetype="png")
+
+    print("Scaling features")
+    features, scaler = scale_training_features(features)
     num_vehicle_features = len(vehicle_images[img_slice])
     num_non_vehicle_features = len(non_vehicle_images[img_slice])
 
@@ -22,13 +24,14 @@ if __name__ == "__main__":
 
     rand = np.random.randint(0, 100)
 
+    print("Splitting features")
     X_train, X_test, y_train, y_test = train_test_split(
         features,
         labels,
-        test_size=0.3,
-        random_state=42)
+        test_size=0.2,
+        random_state=rand)
 
-    classifier = SVC(kernel="linear")
+    classifier = LinearSVC()
 
     print("Fitting data to classifier")
     classifier.fit(X_train, y_train)
@@ -36,7 +39,10 @@ if __name__ == "__main__":
     print("Getting classifier score")
     score = classifier.score(X_test, y_test)
 
-    filename = "classifier.pkl"
-    joblib.dump(classifier, filename)
+    print("Score: {0:.4f}".format(score))
 
-    print("Score: {0:.4f}, saved to file: {1}".format(score, filename))
+    return classifier, scaler
+
+if __name__ == "__main__":
+    classifier, scaler = train()
+    save_model(classifier, scaler)
