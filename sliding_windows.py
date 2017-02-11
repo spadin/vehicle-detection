@@ -1,13 +1,7 @@
 import numpy as np
 
-def sliding_window_list(image, start=(None, None), end=(None, None), window_size=(64, 64), overlap_ratio=(0.5, 0.5)):
-    image_height, image_width, _ = image.shape
-
-    if start == (None, None):
-        start = (0, 0)
-
-    if end == (None, None):
-        end = (image_width, image_height)
+def sliding_window_list(start:(int, int), end:(int, int), scale=1, pixels_per_step=(32, 32)):
+    window_size = tuple(np.array((64, 64)) * scale)
 
     start_x, start_y = start
     end_x, end_y = end
@@ -16,9 +10,7 @@ def sliding_window_list(image, start=(None, None), end=(None, None), window_size
     span_y = end_y - start_y
 
     window_width, window_height = window_size
-    overlap_ratio_x, overlap_ratio_y = overlap_ratio
-    pixels_per_step_x = np.int(window_width * overlap_ratio_x)
-    pixels_per_step_y = np.int(window_height * overlap_ratio_y)
+    pixels_per_step_x, pixels_per_step_y = pixels_per_step
 
     num_windows_x = np.int(((span_x - window_width) // pixels_per_step_x) + 1)
     num_windows_y = np.int(((span_y - window_height) // pixels_per_step_y) + 1)
@@ -33,7 +25,7 @@ def sliding_window_list(image, start=(None, None), end=(None, None), window_size
             window_end_x = window_start_x + window_width
             window_end_y = window_start_y + window_height
 
-            windows.append(((window_start_x, window_start_y), (window_end_x, window_end_y)))
+            windows.append(((window_start_x, window_start_y), (window_end_x, window_end_y), scale))
 
     return windows
 
